@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDB Resale Price Prediction</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <!-- embedded css -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+
+        :root{
+          --pink:#D2B48C;
+          --black:#130f40;
+          --orange:#ffa500;
+          --white:#fff;
+          --grey:#EBECF0;
+          --dgrey:#AAAAAA;
+        }
+
+        *{
+          font-family: 'Nunito', sans-serif;
+          margin:0; padding:0;
+          box-sizing: border-box;
+          text-transform: capitalize;
+          outline: none; border:none;
+          text-decoration: none;
+          transition: all .2s linear;
+        }
+
+        *::selection{
+          background:var(--pink);
+          color:#fff;
+        }
+
+        html{
+          font-size: 62.5%;
+          overflow-x: hidden;
+          scroll-padding-top: 6rem;
+          scroll-behavior: smooth;
+        }
+		
+		h2.prediction-box {
+    border: 0.2rem solid rgba(0, 0, 0, 0.1);
+    font-size: 1.7rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    text-transform: none;
+    color: #333;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.9);
+    width: 29%;
+    text-align: center;
+}
+
+
+        section{
+          padding:3rem 9%;
+        }
+
+        .heading{
+          text-align: center;
+          padding:2rem;
+        }
+
+        .heading h1{
+          font-size: 4rem;
+          padding-bottom: 1rem;
+          text-transform: uppercase;
+        }
+
+        .heading span{
+          font-size: 3.5rem;
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+          border-radius: .5rem;
+          padding:.2rem 1rem;
+        }
+
+        .heading span.space{
+          background:none;
+        }
+
+        .btn0{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--orange);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--orange);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn0:hover{
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+        }
+
+        .btn{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--pink);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--pink);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn:hover{
+          background:rgb(188, 158, 130);
+          color:var(--pink);
+        }
+
+        .btn1{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--dgrey);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--grey);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn1:hover{
+          background:rgba(0, 0, 0,.2);
+          color:var(--grey);
+        }
+		
+		#menu-bar{
+  color:#fff;
+  border:.1rem solid #fff;
+  border-radius: .5rem;
+  font-size: 3rem;
+  padding:.5rem 1.2rem;
+  cursor: pointer;
+  display: none;
+}
+
+header{
+  position: fixed;
+  top:0; left: 0; right:0;
+  background:#333;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:2rem 9%;
+}
+
+header .logo{
+  font-size: 2.5rem;
+  font-weight: bolder;
+  color:#fff;
+  text-transform: uppercase;
+}
+
+header .logo span{
+  color:var(--orange);
+}
+
+header .navbar a{
+  color:#fff;
+  font-size: 2rem;
+  margin:0 .8rem;
+}
+
+header .navbar a:hover{
+  color:var(--orange);
+}
+
+header .icons i{
+  font-size: 2.5rem;
+  color:#fff;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+header .icons i:hover{
+  color:var(--orange);
+}
+
+        #title{
+            font-size: 2rem;
+        }
+
+        header{
+          position: fixed;
+          top:0; left: 0; right:0;
+          background:#333;
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding:2rem 9%;
+        }
+
+        .home{
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          background:url(images/home-bg.jpg) no-repeat;
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+        }
+
+        .home .content span{
+          font-size: 3rem;
+          color:var(--white);
+        }
+
+        .home .content h3{
+          font-size: 6rem;
+          color:var(--white);
+          width:60rem;
+        }
+
+        .contact form{
+          padding:2rem;
+          background: #fff;
+          border-radius: .5rem;
+          box-shadow:0 .5rem 1rem rgba(0,0,0,.9);
+          text-align: center;
+        }
+
+        .contact form .inputBox{
+          display: block;
+          justify-content: space-evenly;
+          flex-wrap: wrap;
+        }
+
+        .contact form .inputBox input, select, .contact form textarea{
+          border:.2rem solid rgba(0,0,0,.1);
+          font-size: 1.7rem;
+          padding: 1.5rem;
+          margin: 1rem 0;
+          text-transform: none;
+          color:#333;
+        }
+
+        .contact form .inputBox input, select{
+          width:29%;
+        }
+
+        .contact form textarea{
+          height: 15rem;
+          width:100%;
+          resize: none;
+        }
+
+        .contact form .inputBox input, select::placeholder,
+        .contact form textarea::placeholder{
+          text-transform: capitalize;
+        }
+
+        .contact form .inputBox input, select:focus,
+        .contact form textarea:focus{
+          border-color: var(--pink);
+        }
+
+        /* media queries  */
+
+        @media (max-width:1200px){
+          html{
+            font-size: 55%;
+          }
+        }
+
+        @media (max-width:991px){
+          header{
+            padding:2rem 4%;
+          }
+          section{
+            padding:3rem 4%;
+          }
+        }
+
+        @media (max-width:768px){
+          .home{
+            justify-content: center;
+            background-position: left;
+          }
+          .home .content{
+            text-align: center;
+          }
+          .home .content span{
+            font-size: 2rem;
+          }
+          .home .content h3{
+            font-size: 4rem;
+            width:auto;
+          }
+          .clients .row{
+            flex-flow: column;
+          }
+          .clients .row .divider{
+            display: none;
+          }
+          .clients .row .box-container:last-child .box{
+            display: flex;
+            flex-flow: column-reverse;
+          }
+          .contact form .inputBox input{
+            width:100%;
+          }
+        }
+
+        @media (max-width:450px){
+          html{
+            font-size: 50%;
+          }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- header section starts  -->
+
+<header>
+
+    <div id="menu-bar" class="fas fa-bars"></div>
+
+
+
+    <nav class="navbar">
+       <a href="https://combined-1-z6te.onrender.com/">Ryan</a>  
+        <a href="https://fillbird.onrender.com">Philander</a>
+		<a href="https://mushrooms-1.onrender.com">Jess</a>
+    </nav>
+
+
+
+</header>
+
+<!-- header section ends -->
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- contact section starts  -->
+
+<section class="contact" id="contact">
+
+    <div class="heading">
+        <h1>HDB Resale Price Prediction</h1>
+    </div>
+
+    <form action="/predict" method="post">
+        <div class="inputBox">
+
+
+<input type="number" name="floor_area" Required placeholder="Floor Area (sqm)" step="1" required>
+<input type="number" name="cbd_dist" Required placeholder="Distance to CBD (km)" step="1" required>
+<input type="number" name="min_dist_mrt" Required placeholder="Distance to Nearest MRT (km))" step="1" required>
+
+<!-- Additional fields for required columns (optional for this task) -->
+        <input type="hidden" name="block" value="">
+        <input type="hidden" name="street_name" value="">
+        <input type="hidden" name="town" value="">
+        <input type="hidden" name="postal_code" value="">
+        <input type="hidden" name="month" value="">
+        <input type="hidden" name="flat_type" value="">
+        <input type="hidden" name="storey_range" value="">
+        <input type="hidden" name="flat_model" value="">
+        <input type="hidden" name="lease_commence_date" value="">
+        <input type="hidden" name="latitude" value="">
+        <input type="hidden" name="longitude" value="">
+        <input type="hidden" name="flat_age" value="">
+
+        </div>
+		
+        
+
+		<input type="reset" value="clear" class="btn1" >
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+	<input type="submit" value="Predict" class="btn">
+	
+	</br>
+	</br>
+	</br>
+	</br>
+	<div>
+		 <h2 class="inputBox">Predicted Resale Price: {{ prediction }}</h2>
+	</div>
+    </form>
+
+</section>
+
+<!-- contact section ends -->
+
+
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+
+
+</body>
+</html>

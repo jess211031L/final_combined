@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mushroom prediction</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <!-- embedded css -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+
+        :root{
+          --pink:#FF9E9E;
+          --black:#130f40;
+          --orange:#ffa500;
+          --white:#fff;
+          --grey:#EBECF0;
+          --dgrey:#AAAAAA;
+        }
+
+        *{
+          font-family: 'Nunito', sans-serif;
+          margin:0; padding:0;
+          box-sizing: border-box;
+          text-transform: capitalize;
+          outline: none; border:none;
+          text-decoration: none;
+          transition: all .2s linear;
+        }
+
+        *::selection{
+          background:var(--pink);
+          color:#fff;
+        }
+
+        html{
+          font-size: 62.5%;
+          overflow-x: hidden;
+          scroll-padding-top: 6rem;
+          scroll-behavior: smooth;
+        }
+		
+		h2.prediction-box {
+    border: 0.2rem solid rgba(0, 0, 0, 0.1);
+    font-size: 1.7rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    text-transform: none;
+    color: #333;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.9);
+    width: 29%;
+    text-align: center;
+}
+
+
+        section{
+          padding:3rem 9%;
+        }
+
+        .heading{
+          text-align: center;
+          padding:2rem;
+        }
+
+        .heading h1{
+          font-size: 4rem;
+          padding-bottom: 1rem;
+          text-transform: uppercase;
+        }
+
+        .heading span{
+          font-size: 3.5rem;
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+          border-radius: .5rem;
+          padding:.2rem 1rem;
+        }
+
+        .heading span.space{
+          background:none;
+        }
+
+        .btn0{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--orange);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--orange);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn0:hover{
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+        }
+
+        .btn{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--pink);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--pink);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn:hover{
+          background:rgba(242, 35, 17,.2);
+          color:var(--pink);
+        }
+
+        .btn1{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--dgrey);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--grey);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn1:hover{
+          background:rgba(0, 0, 0,.2);
+          color:var(--grey);
+        }
+		
+		#menu-bar{
+  color:#fff;
+  border:.1rem solid #fff;
+  border-radius: .5rem;
+  font-size: 3rem;
+  padding:.5rem 1.2rem;
+  cursor: pointer;
+  display: none;
+}
+
+header{
+  position: fixed;
+  top:0; left: 0; right:0;
+  background:#333;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:2rem 9%;
+}
+
+header .logo{
+  font-size: 2.5rem;
+  font-weight: bolder;
+  color:#fff;
+  text-transform: uppercase;
+}
+
+header .logo span{
+  color:var(--orange);
+}
+
+header .navbar a{
+  color:#fff;
+  font-size: 2rem;
+  margin:0 .8rem;
+}
+
+header .navbar a:hover{
+  color:var(--orange);
+}
+
+header .icons i{
+  font-size: 2.5rem;
+  color:#fff;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+header .icons i:hover{
+  color:var(--orange);
+}
+
+
+
+        #title{
+            font-size: 2rem;
+        }
+
+        header{
+          position: fixed;
+          top:0; left: 0; right:0;
+          background:#333;
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding:2rem 9%;
+        }
+
+        .home{
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          background:url(images/home-bg.jpg) no-repeat;
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+        }
+
+        .home .content span{
+          font-size: 3rem;
+          color:var(--white);
+        }
+
+        .home .content h3{
+          font-size: 6rem;
+          color:var(--white);
+          width:60rem;
+        }
+
+        .contact form{
+          padding:2rem;
+          background: #fff;
+          border-radius: .5rem;
+          box-shadow:0 .5rem 1rem rgba(0,0,0,.9);
+          text-align: center;
+        }
+
+        .contact form .inputBox{
+          display: block;
+          justify-content: space-evenly;
+          flex-wrap: wrap;
+        }
+
+        .contact form .inputBox input, select, .contact form textarea{
+          border:.2rem solid rgba(0,0,0,.1);
+          font-size: 1.7rem;
+          padding: 1.5rem;
+          margin: 1rem 0;
+          text-transform: none;
+          color:#333;
+        }
+
+        .contact form .inputBox input, select{
+          width:29%;
+        }
+
+        .contact form textarea{
+          height: 15rem;
+          width:100%;
+          resize: none;
+        }
+
+        .contact form .inputBox input, select::placeholder,
+        .contact form textarea::placeholder{
+          text-transform: capitalize;
+        }
+
+        .contact form .inputBox input, select:focus,
+        .contact form textarea:focus{
+          border-color: var(--pink);
+        }
+
+        /* media queries  */
+
+        @media (max-width:1200px){
+          html{
+            font-size: 55%;
+          }
+        }
+
+        @media (max-width:991px){
+          header{
+            padding:2rem 4%;
+          }
+          section{
+            padding:3rem 4%;
+          }
+        }
+
+        @media (max-width:768px){
+          .home{
+            justify-content: center;
+            background-position: left;
+          }
+          .home .content{
+            text-align: center;
+          }
+          .home .content span{
+            font-size: 2rem;
+          }
+          .home .content h3{
+            font-size: 4rem;
+            width:auto;
+          }
+          .clients .row{
+            flex-flow: column;
+          }
+          .clients .row .divider{
+            display: none;
+          }
+          .clients .row .box-container:last-child .box{
+            display: flex;
+            flex-flow: column-reverse;
+          }
+          .contact form .inputBox input{
+            width:100%;
+          }
+        }
+
+        @media (max-width:450px){
+          html{
+            font-size: 50%;
+          }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- header section starts  -->
+
+<header>
+
+    <div id="menu-bar" class="fas fa-bars"></div>
+
+
+
+    <nav class="navbar">
+        <a href="https://combined-1-z6te.onrender.com/">Ryan</a>  
+        <a href="https://fillbird.onrender.com">Philander</a>
+		<a href="https://mushrooms-1.onrender.com">Jess</a> 
+    </nav>
+
+
+
+</header>
+
+<!-- header section ends -->
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+
+<!-- contact section starts  -->
+
+<section class="contact" id="contact">
+
+    <div class="heading">
+        <h1>Mushroom Prediction</h1>
+    </div>
+
+    <form action="/predict" method="post">
+        <div class="inputBox">
+<select name="cap_shape" >
+    <option value="" selected disabled>Select Cap Shape</option>
+    <option value="convex">convex</option>
+    <option value="bell">bell</option>
+    <option value="sunken">sunken</option>
+    <option value="flat">flat</option>
+    <option value="knobbed">knobbed</option>
+    <option value="conical">conical</option>
+</select>
+
+
+<select name="cap_surface" >
+    <option value="" selected disabled>Select Cap Surface</option>
+    <option value="smooth">smooth</option>
+    <option value="scaly">scaly</option>
+    <option value="fibrous">fibrous</option>
+    <option value="grooves">grooves</option>
+</select>
+
+
+<select name="cap_color" >
+    <option value="" selected disabled>Select Cap Color</option>
+    <option value="brown">brown</option>
+    <option value="yellow">yellow</option>
+    <option value="white">white</option>
+    <option value="gray">gray</option>
+    <option value="red">red</option>
+    <option value="pink">pink</option>
+    <option value="buff">buff</option>
+    <option value="purple">purple</option>
+    <option value="cinnamon">cinnamon</option>
+    <option value="green">green</option>
+</select>
+
+
+<select name="bruises" >
+    <option value="" selected disabled>Select Bruises</option>
+    <option value="bruises">bruises</option>
+    <option value="no">no</option>
+</select>
+
+<select name="odor" >
+    <option value="" selected disabled>Select Odor</option>
+    <option value="pungent">pungent</option>
+    <option value="almond">almond</option>
+    <option value="anise">anise</option>
+    <option value="none">none</option>
+    <option value="foul">foul</option>
+    <option value="creosote">creosote</option>
+    <option value="fishy">fishy</option>
+    <option value="spicy">spicy</option>
+    <option value="musty">musty</option>
+</select>
+
+
+<select name="gill_attachment" >
+    <option value="" selected disabled>Select Gill Attachment</option>
+    <option value="free">free</option>
+    <option value="attached">attached</option>
+</select>
+
+
+<select name="gill_spacing" >
+    <option value="" selected disabled>Select Gill Spacing</option>
+    <option value="close">close</option>
+    <option value="crowded">crowded</option>
+</select>
+
+<select name="gill_size" >
+    <option value="" selected disabled>Select Gill Size</option>
+    <option value="narrow">narrow</option>
+    <option value="broad">broad</option>
+</select>
+
+
+<select name="gill_color" >
+    <option value="" selected disabled>Select Gill Color</option>
+    <option value="black">black</option>
+    <option value="brown">brown</option>
+    <option value="gray">gray</option>
+    <option value="pink">pink</option>
+    <option value="white">white</option>
+    <option value="chocolate">chocolate</option>
+    <option value="purple">purple</option>
+    <option value="red">red</option>
+    <option value="buff">buff</option>
+    <option value="green">green</option>
+    <option value="yellow">yellow</option>
+    <option value="orange">orange</option>
+</select>
+
+<select name="stalk_shape" >
+    <option value="" selected disabled>Select Stalk Shape</option>
+    <option value="enlarging">enlarging</option>
+    <option value="tapering">tapering</option>
+</select>
+
+
+<select name="stalk_root" >
+    <option value="" selected disabled>Select Stalk Root</option>
+    <option value="equal">equal</option>
+    <option value="club">club</option>
+    <option value="bulbous">bulbous</option>
+    <option value="rooted">rooted</option>
+</select>
+
+<select name="stalk_surface_above_ring" >
+    <option value="" selected disabled>Select Stalk Surface Above Ring</option>
+    <option value="smooth">smooth</option>
+    <option value="fibrous">fibrous</option>
+    <option value="silky">silky</option>
+    <option value="scaly">scaly</option>
+</select>
+
+<select name="stalk_surface_below_ring" >
+    <option value="" selected disabled>Select Stalk Surface Below Ring</option>
+    <option value="smooth">smooth</option>
+    <option value="fibrous">fibrous</option>
+    <option value="scaly">scaly</option>
+    <option value="silky">silky</option>
+</select>
+
+<select name="stalk_color_above_ring" >
+    <option value="" selected disabled>Select Stalk Color Above Ring</option>
+    <option value="white">white</option>
+    <option value="gray">gray</option>
+    <option value="pink">pink</option>
+    <option value="brown">brown</option>
+    <option value="buff">buff</option>
+    <option value="red">red</option>
+    <option value="orange">orange</option>
+    <option value="cinnamon">cinnamon</option>
+    <option value="yellow">yellow</option>
+</select>
+
+
+<select name="stalk_color_below_ring" >
+    <option value="" selected disabled>Select Stalk Color Below Ring</option>
+    <option value="white">white</option>
+    <option value="pink">pink</option>
+    <option value="gray">gray</option>
+    <option value="buff">buff</option>
+    <option value="brown">brown</option>
+    <option value="red">red</option>
+    <option value="yellow">yellow</option>
+    <option value="orange">orange</option>
+    <option value="cinnamon">cinnamon</option>
+</select>
+
+<select name="veil_type" >
+    <option value="" selected disabled>Select Veil Type</option>
+    <option value="partial">partial</option>
+</select>
+
+<select name="veil_color" >
+    <option value="" selected disabled>Select Veil Color</option>
+    <option value="white">white</option>
+    <option value="brown">brown</option>
+    <option value="orange">orange</option>
+    <option value="yellow">yellow</option>
+</select>
+
+
+<select name="ring_number" >
+    <option value="" selected disabled>Select Ring Number</option>
+    <option value="one">one</option>
+    <option value="two">two</option>
+    <option value="none">none</option>
+</select>
+
+
+<select name="ring_type" >
+    <option value="" selected disabled>Select Ring Type</option>
+    <option value="pendant">pendant</option>
+    <option value="evanescent">evanescent</option>
+    <option value="large">large</option>
+    <option value="flaring">flaring</option>
+    <option value="none">none</option>
+</select>
+
+<select name="spore_print_color" >
+    <option value="" selected disabled>Select Spore Print Color</option>
+    <option value="black">black</option>
+    <option value="brown">brown</option>
+    <option value="purple">purple</option>
+    <option value="chocolate">chocolate</option>
+    <option value="white">white</option>
+    <option value="green">green</option>
+    <option value="orange">orange</option>
+    <option value="yellow">yellow</option>
+    <option value="buff">buff</option>
+</select>
+
+
+<select name="population" >
+    <option value="" selected disabled>Select Population</option>
+    <option value="scattered">scattered</option>
+    <option value="numerous">numerous</option>
+    <option value="abundant">abundant</option>
+    <option value="several">several</option>
+    <option value="solitary">solitary</option>
+    <option value="clustered">clustered</option>
+</select>
+
+
+<select name="habitat" >
+    <option value="" selected disabled>Select Habitat</option>
+    <option value="urban">urban</option>
+    <option value="grasses">grasses</option>
+    <option value="meadows">meadows</option>
+    <option value="woods">woods</option>
+    <option value="path">path</option>
+    <option value="leaves">leaves</option>
+</select>
+
+        </div>
+		
+        
+
+		<input type="reset" value="clear" class="btn1" >
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+	<input type="submit" value="Predict" class="btn">
+	
+	</br>
+	</br>
+	</br>
+	</br>
+	<div>
+		 <h2 class="inputBox">Prediction: {{ prediction }}</h2>
+	</div>
+    </form>
+
+</section>
+
+<!-- contact section ends -->
+
+
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anomaly detection</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <!-- embedded css -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+
+        :root{
+          --pink:#FADA5E;
+          --black:#130f40;
+          --orange:#ffa500;
+          --white:#fff;
+          --grey:#EBECF0;
+          --dgrey:#AAAAAA;
+        }
+
+        *{
+          font-family: 'Nunito', sans-serif;
+          margin:0; padding:0;
+          box-sizing: border-box;
+          text-transform: capitalize;
+          outline: none; border:none;
+          text-decoration: none;
+          transition: all .2s linear;
+        }
+
+        *::selection{
+          background:var(--pink);
+          color:#fff;
+        }
+
+        html{
+          font-size: 62.5%;
+          overflow-x: hidden;
+          scroll-padding-top: 6rem;
+          scroll-behavior: smooth;
+        }
+		
+		h2.prediction-box {
+    border: 0.2rem solid rgba(0, 0, 0, 0.1);
+    font-size: 1.7rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    text-transform: none;
+    color: #333;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.9);
+    width: 29%;
+    text-align: center;
+}
+
+
+        section{
+          padding:3rem 9%;
+        }
+
+        .heading{
+          text-align: center;
+          padding:2rem;
+        }
+
+        .heading h1{
+          font-size: 4rem;
+          padding-bottom: 1rem;
+          text-transform: uppercase;
+        }
+
+        .heading span{
+          font-size: 3.5rem;
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+          border-radius: .5rem;
+          padding:.2rem 1rem;
+        }
+
+        .heading span.space{
+          background:none;
+        }
+
+        .btn0{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--orange);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--orange);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn0:hover{
+          background:rgba(255, 165, 0,.2);
+          color:var(--orange);
+        }
+
+        .btn{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--pink);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--pink);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn:hover{
+          background:rgb(238, 190, 2);
+          color:var(--pink);
+        }
+
+        .btn1{
+          display: inline-block;
+          margin-top: 1rem;
+          background:var(--dgrey);
+          color:#fff;
+          padding:.8rem 3rem;
+          border:.2rem solid var(--grey);
+          cursor: pointer;
+          font-size: 1.7rem;
+        }
+
+        .btn1:hover{
+          background:rgba(0, 0, 0,.2);
+          color:var(--grey);
+        }
+		
+		#menu-bar{
+  color:#fff;
+  border:.1rem solid #fff;
+  border-radius: .5rem;
+  font-size: 3rem;
+  padding:.5rem 1.2rem;
+  cursor: pointer;
+  display: none;
+}
+
+header{
+  position: fixed;
+  top:0; left: 0; right:0;
+  background:#333;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:2rem 9%;
+}
+
+header .logo{
+  font-size: 2.5rem;
+  font-weight: bolder;
+  color:#fff;
+  text-transform: uppercase;
+}
+
+header .logo span{
+  color:var(--orange);
+}
+
+header .navbar a{
+  color:#fff;
+  font-size: 2rem;
+  margin:0 .8rem;
+}
+
+header .navbar a:hover{
+  color:var(--orange);
+}
+
+header .icons i{
+  font-size: 2.5rem;
+  color:#fff;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+header .icons i:hover{
+  color:var(--orange);
+}
+
+        #title{
+            font-size: 2rem;
+        }
+
+        header{
+          position: fixed;
+          top:0; left: 0; right:0;
+          background:#333;
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding:2rem 9%;
+        }
+
+        .home{
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          background:url(images/home-bg.jpg) no-repeat;
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+        }
+
+        .home .content span{
+          font-size: 3rem;
+          color:var(--white);
+        }
+
+        .home .content h3{
+          font-size: 6rem;
+          color:var(--white);
+          width:60rem;
+        }
+
+        .contact form{
+          padding:2rem;
+          background: #fff;
+          border-radius: .5rem;
+          box-shadow:0 .5rem 1rem rgba(0,0,0,.9);
+          text-align: center;
+        }
+
+        .contact form .inputBox{
+          display: block;
+          justify-content: space-evenly;
+          flex-wrap: wrap;
+        }
+
+        .contact form .inputBox input, select, .contact form textarea{
+          border:.2rem solid rgba(0,0,0,.1);
+          font-size: 1.7rem;
+          padding: 1.5rem;
+          margin: 1rem 0;
+          text-transform: none;
+          color:#333;
+        }
+
+        .contact form .inputBox input, select{
+          width:29%;
+        }
+
+        .contact form textarea{
+          height: 15rem;
+          width:100%;
+          resize: none;
+        }
+
+        .contact form .inputBox input, select::placeholder,
+        .contact form textarea::placeholder{
+          text-transform: capitalize;
+        }
+
+        .contact form .inputBox input, select:focus,
+        .contact form textarea:focus{
+          border-color: var(--pink);
+        }
+
+        /* media queries  */
+
+        @media (max-width:1200px){
+          html{
+            font-size: 55%;
+          }
+        }
+
+        @media (max-width:991px){
+          header{
+            padding:2rem 4%;
+          }
+          section{
+            padding:3rem 4%;
+          }
+        }
+
+        @media (max-width:768px){
+          .home{
+            justify-content: center;
+            background-position: left;
+          }
+          .home .content{
+            text-align: center;
+          }
+          .home .content span{
+            font-size: 2rem;
+          }
+          .home .content h3{
+            font-size: 4rem;
+            width:auto;
+          }
+          .clients .row{
+            flex-flow: column;
+          }
+          .clients .row .divider{
+            display: none;
+          }
+          .clients .row .box-container:last-child .box{
+            display: flex;
+            flex-flow: column-reverse;
+          }
+          .contact form .inputBox input{
+            width:100%;
+          }
+        }
+
+        @media (max-width:450px){
+          html{
+            font-size: 50%;
+          }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- header section starts  -->
+
+<header>
+
+    <div id="menu-bar" class="fas fa-bars"></div>
+
+
+
+    <nav class="navbar">
+        <a href="https://combined-1-z6te.onrender.com/">Ryan</a>  
+        <a href="https://fillbird.onrender.com">Philander</a>
+		<a href="https://mushrooms-1.onrender.com">Jess</a>
+    </nav>
+
+
+
+</header>
+
+<!-- header section ends -->
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+<!-- contact section starts  -->
+
+<section class="contact" id="contact">
+
+    <div class="heading">
+        <h1>Anomaly Detection</h1>
+    </div>
+
+    <form action="/predict" method="post">
+        <div class="inputBox">
+		<select name="fiscal_year" >
+    <option value="" selected disabled>Fiscal Year</option>
+    <option value="2017">2017</option>
+    <option value="2018">2018</option>
+    <option value="2019">2019</option>
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+</select>
+
+<select name="fiscal_mth">
+    <option value="" selected disabled>Select Fiscal Month</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+</select>
+
+<select name="dept_name">
+    <option value="" selected disabled>Select Department Name</option>
+    <option value="DEPT OF EDUCATION">DEPT OF EDUCATION</option>
+</select>
+
+
+<select name="div_name">
+    <option value="" selected disabled>Select Division Name</option>
+    <option value="" selected disabled>Select Category Description</option>
+<option value="DEPARTMENT OF EDUCATION">DEPARTMENT OF EDUCATION</option>
+<option value="EDUCATION BLOCK GRANTS">EDUCATION BLOCK GRANTS</option>
+<option value="SPECIAL NEEDS PROGRAMS">SPECIAL NEEDS PROGRAMS</option>
+<option value="ADVISORY COUNCIL">ADVISORY COUNCIL</option>
+<option value="TRANSPORTATION">TRANSPORTATION</option>
+<option value="DRIVER TRAINING">DRIVER TRAINING</option>
+<option value="OTHER ITEMS">OTHER ITEMS</option>
+<option value="E EDUCATION BLOCK GRANTS">E EDUCATION BLOCK GRANTS</option>
+<option value="E TRANSPORTATION">E TRANSPORTATION</option>
+<option value="ACADEMIC SUPPORT">ACADEMIC SUPPORT</option>
+<option value="OPERATIONS SUPPORT">OPERATIONS SUPPORT</option>
+<option value="OFFICE OF EARLY LEARNING">OFFICE OF EARLY LEARNING</option>
+<option value="OFFICE OF THE SECRETARY">OFFICE OF THE SECRETARY</option>
+<option value="STUDENT SUPPORT">STUDENT SUPPORT</option>
+<option value="PROFESSIONAL STANDARDS BOARD">PROFESSIONAL STANDARDS BOARD</option>
+<option value="STATE BOARD OF EDUCATION">STATE BOARD OF EDUCATION</option>
+<option value="PUBLIC SCHOOL TRANSPORTATION">PUBLIC SCHOOL TRANSPORTATION</option>
+<option value="EDUCATOR SUPPORT">EDUCATOR SUPPORT</option>
+<option value="ADULT EDUCATION AND WORK FORCE">ADULT EDUCATION AND WORK FORCE</option>
+</select>
+		
+<select name="cat_desc">
+    <option value="" selected disabled>Select Category Description</option>
+<option value="LODGING">LODGING</option>
+<option value="EATING PLACES RESTAURANTS">EATING PLACES RESTAURANTS</option>
+<option value="AIRLINE">AIRLINE</option>
+<option value="BOOK STORES">BOOK STORES</option>
+<option value="TRAVEL">TRAVEL</option>
+<option value="OFFICE AND COMMERCIAL FURNITURE">OFFICE AND COMMERCIAL FURNITURE</option>
+<option value="FAST FOOD RESTAURANTS">FAST FOOD RESTAURANTS</option>
+<option value="AUTOMOBILE PARKING LOTS AND GARAGES">AUTOMOBILE PARKING LOTS AND GARAGES</option>
+<option value="STATIONERY-OFFICE SUPPLIES-PRINTING WRITING PAP">STATIONERY-OFFICE SUPPLIES-PRINTING WRITING PAP</option>
+<option value="TELECOM INCL PREPAID-RECURRING PHONE SVCS">TELECOM INCL PREPAID-RECURRING PHONE SVCS</option>
+<option value="INDUSTRIAL SUPPLIES NOT ELSEWHERE CLASSIFIED">INDUSTRIAL SUPPLIES NOT ELSEWHERE CLASSIFIED</option>
+<option value="FREIGHT CARRIER TRUCKING-LCL-LNG DIST MVG-STORAGE">FREIGHT CARRIER TRUCKING-LCL-LNG DIST MVG-STORAGE</option>
+<option value="DRUG STORES PHARMACIES">DRUG STORES PHARMACIES</option>
+<option value="ORGANIZATIONS MEMBERSHIP-NOT ELSEWHERE CLASSIFIED">ORGANIZATIONS MEMBERSHIP-NOT ELSEWHERE CLASSIFIED</option>
+<option value="MISCELLANEOUS AND SPECIALTY RETAIL STORES">MISCELLANEOUS AND SPECIALTY RETAIL STORES</option>
+<option value="OFFICE SCHOOL SUPPLY AND STATIONERY STORES">OFFICE SCHOOL SUPPLY AND STATIONERY STORES</option>
+<option value="MISCELLANEOUS GENERAL MERCHANDISE">MISCELLANEOUS GENERAL MERCHANDISE</option>
+<option value="GIFT CARD NOVELTY AND SOUVENIR SHOPS">GIFT CARD NOVELTY AND SOUVENIR SHOPS</option>
+<option value="OFFICE PHOTOGRAPHIC PHOTOCOPY MICROFILM EQUIPMT">OFFICE PHOTOGRAPHIC PHOTOCOPY MICROFILM EQUIPMT</option>
+<option value="ORGANIZATIONS CHARITABLE AND SOCIAL SERVICES">ORGANIZATIONS CHARITABLE AND SOCIAL SERVICES</option>
+<option value="VARIETY STORES">VARIETY STORES</option>
+<option value="TRANSPORTATION SERVICES NOT ELSEWHERE CLASSIFIED">TRANSPORTATION SERVICES NOT ELSEWHERE CLASSIFIED</option>
+<option value="SERVICE STATIONS WITH OR WITHOUT ANCILLARY SERVICE">SERVICE STATIONS WITH OR WITHOUT ANCILLARY SERVICE</option>
+<option value="POSTAL SERVICES-GOVERNMENT ONLY">POSTAL SERVICES-GOVERNMENT ONLY</option>
+<option value="CAR RENTAL">CAR RENTAL</option>
+<option value="GROCERY STORES SUPERMARKETS">GROCERY STORES SUPERMARKETS</option>
+<option value="MISCELLANEOUS PUBLISHING AND PRINTING">MISCELLANEOUS PUBLISHING AND PRINTING</option>
+<option value="ATHLTIC FIELDS COMMRCL SPRT SPRT CLBS SPRT PROMOTR">ATHLTIC FIELDS COMMRCL SPRT SPRT CLBS SPRT PROMOTR</option>
+<option value="GOVERNMENT SERVICES-NOT ELSEWHERE CLASSIFIED">GOVERNMENT SERVICES-NOT ELSEWHERE CLASSIFIED</option>
+<option value="MISC FOOD STORE-CONVENIENCE MRKT SPLTY VENDNG MACS">MISC FOOD STORE-CONVENIENCE MRKT SPLTY VENDNG MACS</option>
+<option value="COMPUTER NETWORK-INFORMATION SERVICES">COMPUTER NETWORK-INFORMATION SERVICES</option>
+<option value="HARDWARE EQUIPMENT AND SUPPLIES">HARDWARE EQUIPMENT AND SUPPLIES</option>
+<option value="DIRECT MARKETING-CONTINUITY-SUBSCRIPTION MERCHANTS">DIRECT MARKETING-CONTINUITY-SUBSCRIPTION MERCHANTS</option>
+<option value="COMPUTERS COMPUTER PERIPHERAL EQUIPMENT SOFTWARE">COMPUTERS COMPUTER PERIPHERAL EQUIPMENT SOFTWARE</option>
+<option value="DIRECT MARKETING-CATALOG MERCHANTS">DIRECT MARKETING-CATALOG MERCHANTS</option>
+<option value="BOOKS PERIODICALS AND NEWSPAPERS">BOOKS PERIODICALS AND NEWSPAPERS</option>
+<option value="GLASS PAINT WALLPAPER STORES">GLASS PAINT WALLPAPER STORES</option>
+<option value="COMMERCIAL EQUIPMENT NOT ELSEWHERE CLASSIFIED">COMMERCIAL EQUIPMENT NOT ELSEWHERE CLASSIFIED</option>
+<option value="SCHOOLS EDUCATIONAL SVC-NOT ELSEWHERE CLASSIFIED">SCHOOLS EDUCATIONAL SVC-NOT ELSEWHERE CLASSIFIED</option>
+<option value="DISCOUNT STORES">DISCOUNT STORES</option>
+<option value="CABLE SATELLITE OTHER PAY TELEVISION RADIO SVCS">CABLE SATELLITE OTHER PAY TELEVISION RADIO SVCS</option>
+<option value="PROFESSIONAL SERVICES-NOT ELSEWHERE CLASSIFIED">PROFESSIONAL SERVICES-NOT ELSEWHERE CLASSIFIED</option>
+<option value="ASSOCIATIONS-CIVIC SOCIAL AND FRATERNAL">ASSOCIATIONS-CIVIC SOCIAL AND FRATERNAL</option>
+<option value="COLLEGES UNIV PRO SCHOOLS JUNIOR COLLEGES">COLLEGES UNIV PRO SCHOOLS JUNIOR COLLEGES</option>
+<option value="NONDURABLE GOODS NOT ELSEWHERE CLASSIFIED">NONDURABLE GOODS NOT ELSEWHERE CLASSIFIED</option>
+<option value="DIRECT MARKETING-OTHER DIRECT MARKETERS-NOT ELSEW">DIRECT MARKETING-OTHER DIRECT MARKETERS-NOT ELSEW</option>
+<option value="NEWS DEALERS AND NEWSSTANDS">NEWS DEALERS AND NEWSSTANDS</option>
+<option value="AUTOMOTIVE SERVICE SHOPS">AUTOMOTIVE SERVICE SHOPS</option>
+<option value="BUSINESS SERVICES-NOT ELSEWHERE CLASSIFIED">BUSINESS SERVICES-NOT ELSEWHERE CLASSIFIED</option>
+<option value="COMPUTER SOFTWARE STORES">COMPUTER SOFTWARE STORES</option>
+<option value="OTHER SERVICES NOT ELSEWHERE CLASSIFIED">OTHER SERVICES NOT ELSEWHERE CLASSIFIED</option>
+<option value="HEALTH PRACTITIONERS MEDICAL SRVCS-NOT ELSEWHERE">HEALTH PRACTITIONERS MEDICAL SRVCS-NOT ELSEWHERE</option>
+<option value="DURABLE GOODS NOT ELSEWHERE CLASSIFIED">DURABLE GOODS NOT ELSEWHERE CLASSIFIED</option>
+<option value="BAKERIES">BAKERIES</option>
+<option value="HOME SUPPLY WAREHOUSE STORES">HOME SUPPLY WAREHOUSE STORES</option>
+<option value="ELECTRICAL PARTS AND EQUIPMENT">ELECTRICAL PARTS AND EQUIPMENT</option>
+<option value="ELECTRONIC SALES">ELECTRONIC SALES</option>
+<option value="HARDWARE STORES">HARDWARE STORES</option>
+<option value="DENTAL-LAB-MED-OPHTHALMIC HOSP EQUIP SUPPLIES">DENTAL-LAB-MED-OPHTHALMIC HOSP EQUIP SUPPLIES</option>
+<option value="MUSIC STORES-INSTRUMENTS PIANOS SHEET MUSIC">MUSIC STORES-INSTRUMENTS PIANOS SHEET MUSIC</option>
+<option value="FUEL DISPENSER AUTOMATED">FUEL DISPENSER AUTOMATED</option>
+<option value="MISCELLANEOUS REPAIR SHOPS AND RELATED SERVICES">MISCELLANEOUS REPAIR SHOPS AND RELATED SERVICES</option>
+<option value="BRIDGE AND ROAD FEES TOLLS">BRIDGE AND ROAD FEES TOLLS</option>
+<option value="SCHOOLS ELEMENTARY AND SECONDARY">SCHOOLS ELEMENTARY AND SECONDARY</option>
+<option value="EMPLOYMENT AGENCIES TEMPORARY HELP SERVICES">EMPLOYMENT AGENCIES TEMPORARY HELP SERVICES</option>
+<option value="MISCELLANEOUS SERVICES">MISCELLANEOUS SERVICES</option>
+<option value="ADVERTISING SERVICES">ADVERTISING SERVICES</option>
+<option value="SPORTING GOODS STORES">SPORTING GOODS STORES</option>
+<option value="RECREATION SERVICES NOT ELSEWHERE CLASSIFIED">RECREATION SERVICES NOT ELSEWHERE CLASSIFIED</option>
+<option value="CONSTRUCTION MATERIALS NOT ELSEWHERE CLASSIFIED">CONSTRUCTION MATERIALS NOT ELSEWHERE CLASSIFIED</option>
+<option value="COMP PROGRAMING DATA PRCSNG INTGRTD SYS DSGN SRVS">COMP PROGRAMING DATA PRCSNG INTGRTD SYS DSGN SRVS</option>
+<option value="ELECTRONIC REPAIR SHOPS">ELECTRONIC REPAIR SHOPS</option>
+<option value="CATERERS">CATERERS</option>
+<option value="DEPARTMENT STORES">DEPARTMENT STORES</option>
+<option value="CONSULTING MANAGEMENT AND PUBLIC RELATIONS SVCS">CONSULTING MANAGEMENT AND PUBLIC RELATIONS SVCS</option>
+<option value="DETECTVE-PROTECTVE AGNCY SECURITY SRVS ARMOR CARS">DETECTVE-PROTECTVE AGNCY SECURITY SRVS ARMOR CARS</option>
+<option value="THEATRICAL PRODUCERSEXCL MOTION PIX TICKET AGNCY">THEATRICAL PRODUCERSEXCL MOTION PIX TICKET AGNCY</option>
+<option value="BUILDING MATERIALS LUMBER STORES">BUILDING MATERIALS LUMBER STORES</option>
+<option value="ARCHITECTURAL ENGINEERING AND SURVEYING SERVICES">ARCHITECTURAL ENGINEERING AND SURVEYING SERVICES</option>
+<option value="DIRECT MARKETING-COMBINATION CATALOG-RETAIL MERCH">DIRECT MARKETING-COMBINATION CATALOG-RETAIL MERCH</option>
+<option value="ARTIST SUPPLY STORES CRAFT SHOPS">ARTIST SUPPLY STORES CRAFT SHOPS</option>
+<option value="LAWN AND GARDEN SUPPLY STORES">LAWN AND GARDEN SUPPLY STORES</option>
+<option value="PIECE GOODS NOTIONS AND OTHER DRY GOODS">PIECE GOODS NOTIONS AND OTHER DRY GOODS</option>
+<option value="EQUIPMENT RENTALLEASING SVS FURNTURE-TOOL RENTAL">EQUIPMENT RENTALLEASING SVS FURNTURE-TOOL RENTAL</option>
+<option value="COURIER SVC-AIR GROUND FREIGHT FORWARDERS">COURIER SVC-AIR GROUND FREIGHT FORWARDERS</option>
+<option value="CLEANING AND MAINTENANCE JANITORIAL SERVICES">CLEANING AND MAINTENANCE JANITORIAL SERVICES</option>
+<option value="AUTOMOTIVE PARTS ACCESSORIES STORES">AUTOMOTIVE PARTS ACCESSORIES STORES</option>
+<option value="ATTORNEYS LEGAL SERVICES">ATTORNEYS LEGAL SERVICES</option>
+<option value="COMMERCIAL ART GRAPHICS PHOTOGRAPHY">COMMERCIAL ART GRAPHICS PHOTOGRAPHY</option>
+<option value="ACCESSORY AND APPAREL STORES-MISCELLANEOUS">ACCESSORY AND APPAREL STORES-MISCELLANEOUS</option>
+<option value="INTERNAL TRANSACTION">INTERNAL TRANSACTION</option>
+<option value="MOTION PICTURE THEATERS">MOTION PICTURE THEATERS</option>
+<option value="APPLICATIONS - EXCLUDES GAMES">APPLICATIONS - EXCLUDES GAMES</option>
+<option value="CAMERA AND PHOTOGRAPHIC SUPPLY STORES">CAMERA AND PHOTOGRAPHIC SUPPLY STORES</option>
+<option value="ELECTRICAL AND SMALL APPLIANCE REPAIR SHOPS">ELECTRICAL AND SMALL APPLIANCE REPAIR SHOPS</option>
+<option value="COMPUTER MAIN-REPAIR-SERVICES NOT ELSEWHERE CLASS">COMPUTER MAIN-REPAIR-SERVICES NOT ELSEWHERE CLASS</option>
+<option value="CONTRACTORS SPECIAL TRADE-NOT ELSEWHERE CLASSIFIED">CONTRACTORS SPECIAL TRADE-NOT ELSEWHERE CLASSIFIED</option>
+<option value="SPORTS APPAREL RIDING APPAREL STORES">SPORTS APPAREL RIDING APPAREL STORES</option>
+<option value="CONSUMER CREDIT REPORTING AGENCIES">CONSUMER CREDIT REPORTING AGENCIES</option>
+<option value="MOTION PICTURE-VIDEO TAPE PRODUCTION-DISTRIBUTION">MOTION PICTURE-VIDEO TAPE PRODUCTION-DISTRIBUTION</option>
+<option value="MISC-AUTO-AIRCRAFT-FARM EQUIP NOT ELSEWHERE CLASS">MISC-AUTO-AIRCRAFT-FARM EQUIP NOT ELSEWHERE CLASS</option>
+<option value="EQUIP FURNITURE HOME FURNSHNGS STRS EXCPT APPL">EQUIP FURNITURE HOME FURNSHNGS STRS EXCPT APPL</option>
+<option value="AUTOGRAPH">AUTOGRAPH</option>
+<option value="STENOGRAPHIC AND SECRETARIAL SUPPORT SERVICES">STENOGRAPHIC AND SECRETARIAL SUPPORT SERVICES</option>
+<option value="DRY CLEANERS">DRY CLEANERS</option>
+<option value="MENS-WOMENS-CHILDRENS UNIFORMS-COMMERCIAL CLOTH">MENS-WOMENS-CHILDRENS UNIFORMS-COMMERCIAL CLOTH</option>
+<option value="MENS AND WOMENS CLOTHING STORES">MENS AND WOMENS CLOTHING STORES</option>
+<option value="TAX PREPARATION SERVICE">TAX PREPARATION SERVICE</option>
+<option value="WHOLESALE CLUBS">WHOLESALE CLUBS</option>
+<option value="CLOTHING RENTAL-COSTUMES UNIFORMS FORMAL WEAR">CLOTHING RENTAL-COSTUMES UNIFORMS FORMAL WEAR</option>
+<option value="ACCOUNTING AUDITING AND BOOKKEEPING SERVICES">ACCOUNTING AUDITING AND BOOKKEEPING SERVICES</option>
+<option value="QUICK COPY REPRODUCTION AND BLUEPRINTING SERVICES">QUICK COPY REPRODUCTION AND BLUEPRINTING SERVICES</option>
+<option value="HEATING PLUMBING AIR CONDITIONING CONTRACTORS">HEATING PLUMBING AIR CONDITIONING CONTRACTORS</option>
+<option value="BANDS ORCHESTRAS MISC ENTRTNRS-NOT ELSWHR CLAS">BANDS ORCHESTRAS MISC ENTRTNRS-NOT ELSWHR CLAS</option>
+<option value="AUTOMOTIVE TIRE STORES">AUTOMOTIVE TIRE STORES</option>
+<option value="INSURANCE SALES UNDERWRITING AND PREMIUMS">INSURANCE SALES UNDERWRITING AND PREMIUMS</option>
+<option value="SCHOOLS CORRESPONDENCE">SCHOOLS CORRESPONDENCE</option>
+<option value="RECORD SHOPS">RECORD SHOPS</option>
+<option value="CLEANING GARMENT AND LAUNDRY SERVICES">CLEANING GARMENT AND LAUNDRY SERVICES</option>
+<option value="CANDY NUT CONFECTIONERY STORES">CANDY NUT CONFECTIONERY STORES</option>
+<option value="BAR LOUNGE DISCO NIGHTCLUB TAVERN-ALCOHOLIC DRINKS">BAR LOUNGE DISCO NIGHTCLUB TAVERN-ALCOHOLIC DRINKS</option>
+</select>
+    
+		
+
+		<input type="text" name="amt" Required placeholder="Amount">
+
+        </div>
+		
+       
+		<input type="reset" value="clear" class="btn1" >
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+	<input type="submit" value="Predict" class="btn">
+	
+	</br>
+	</br>
+	</br>
+	</br>
+	<div>
+		 <h2 class="inputBox">Prediction: {{ prediction }}</h2>
+	</div>
+    </form>
+
+</section>
+
+<!-- contact section ends -->
+
+
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+
+
+</body>
+</html>

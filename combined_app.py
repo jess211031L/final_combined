@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect
-from pycaret.anomaly import load_model as load_anomaly_model
 from pycaret.regression import load_model as load_regression_model
+from pycaret.anomaly import load_model as load_anomaly_model
 from pycaret.classification import load_model as load_classification_model
 import pandas as pd
 import os
